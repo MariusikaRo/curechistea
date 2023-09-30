@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biserica Sf. Ierarhi Atanasie și Chiril, Curechiștea</title>
+    <style>
+        /* Stiluri CSS pentru bara de navigație */
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            padding: 1rem;
+        }
+
+        .menu-btn {
+            display: inline-block;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .menu-btn:focus {
+            outline: none;
+        }
+
+        /* Stiluri CSS pentru bara stângă */
+        .left-bar {
+            width: 200px;
+            float: left;
+            background-color: #111;
+            color: #fff;
+            height: 100vh;
+            padding: 1rem;
+            display: none;
+        }
+
+        .left-bar.active {
+            display: block;
+        }
+
+        .left-bar button {
+            display: block;
+            margin-bottom: 1rem;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 0.5rem;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .left-bar button:hover {
+            background-color: #555;
+        }
+
+        /* Stiluri CSS pentru secțiuni */
+        .section-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .section-open {
+            max-height: 500px;
+            /* Setați aici înălțimea potrivită pentru conținutul secțiunilor */
+            transition: max-height 0.3s ease;
+        }
+
+        /* Stiluri CSS pentru butoane */
+        .action-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .like-btn {
+            background-color: #3b5998;
+        }
+
+        .comment-btn {
+            background-color: #1d8bf0;
+        }
+
+        .share-btn {
+            background-color: #dd4b39;
+        }
+
+        .action-btn:hover {
+            background-color: #333;
+        }
+
+        /* Stiluri CSS pentru restul paginii */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #111;
+            color: #fff;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            padding: 1rem;
+        }
+
+        .post-content {
+            margin-bottom: 1rem;
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .comments-section {
+            margin-top: 10px;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        #map {
+            height: 300px;
+        }
+
+        /* Stiluri pentru secțiunea Adăugare postare */
+        .add-post-section {
+            display: none;
+        }
+
+        .admin-only .add-post-section {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Biserica Sf. Ierarhi Atanasie și Chiril, Curechiștea</h1>
+        <button class="menu-btn" onclick="toggleLeftBar()">&#9776;</button>
+    </header>
+
+    <!-- Bara stângă -->
+    <div class="left-bar" id="leftBar">
+        <!-- Despre noi - Bara deschisă -->
+        <button class="action-btn" onclick="toggleSection('despre-noi')">Despre noi</button>
+        <section class="section-content section-open" id="despre-noi">
+            <h2>Despre noi</h2>
+            <p>Biserica Sf. Ierarhi Atanasie și Chiril este o biserică ortodoxă situată în Curechiștea. Biserica a fost construită în anul XXXX și a fost sfințită de către XXXXX la data de XX.XX.XXXX.</p>
+            <p>În cadrul bisericii noastre se desfășoară periodic slujbe religioase, precum Sfânta Liturghie, Taina Botezului și alte sărbători importante din calendarul ortodox.</p>
+        </section>
+
+        <!-- Contact - Bara deschisă -->
+        <button class="action-btn" onclick="toggleSection('contact')">Contact</button>
+        <section class="section-content section-open" id="contact">
+            <h2>Contact</h2>
+            <p>Pentru mai multe informații despre Biserica Sf. Ierarhi Atanasie și Chiril, vă rugăm să ne contactați prin email sau telefon:</p>
+            <ul>
+                <li>Email: <a href="mailto:contact@biserica-curechistea.ro">contact@biserica-curechistea.ro</a></li>
+                <li>Telefon: 123-456-7890</li>
+            </ul>
+        </section>
+
+        <!-- Autentificare pentru administratori - Bara deschisă -->
+        <button class="action-btn" onclick="toggleSection('admin-auth')">Autentificare administratori</button>
+        <section class="section-content section-open" id="admin-auth">
+            <h2>Autentificare administratori</h2>
+            <form onsubmit="authenticateAdmin(); return false;">
+                <input type="email" id="admin-email" placeholder="Email administrator">
+                <input type="password" id="admin-password" placeholder="Parolă">
+                <button type="submit" class="action-btn">Autentificare</button>
+            </form>
+        </section>
+    </div>
+
+    <div class="container">
+        <img src="https://doxologia.ro/sites/default/files/styles/max_1300x1300/public/articol/2021/09/sfintire_biserica_curechistea_ps_nichifor_botosaneanul_26_septembrie_2021_foto_flavius_popa_doxologia.ro_03_result.jpg?itok=oBqp_JkH" alt="Imagine cu Biserica Sf. Ierarhi Atanasie și Chiril, Curechiștea">
+
+        <!-- Postarea 1 -->
+        <div class="post">
+            <h2 id="post-title-1">Titlu Postare 1</h2>
+            <div class="post-content">
+                <p>Aici puteți scrie textul postării, inclusiv formatarea și stilizarea acestuia.</p>
+            </div>
+            <div class="post-actions">
+                <button class="action-btn like-btn" onclick="toggleLike(1)">Apreciază (<span id="likes-count-1">0</span>)</button>
+                <button class="action-btn share-btn" onclick="sharePost(1)">Distribuie</button>
+            </div>
+        </div>
+
+        <!-- Postarea 2 -->
+        <div class="post">
+            <h2 id="post-title-2">Titlu Postare 2</h2>
+            <div class="post-content">
+                <p>Aici puteți scrie textul postării, inclusiv formatarea și stilizarea acestuia.</p>
+                <img src="link_spre_imagine_postare_2.jpg" alt="Imagine Postare 2">
+            </div>
+            <div class="post-actions">
+                <button class="action-btn like-btn" onclick="toggleLike(2)">Apreciază (<span id="likes-count-2">0</span>)</button>
+                <button class="action-btn share-btn" onclick="sharePost(2)">Distribuie</button>
+            </div>
+        </div>
+
+        <!-- Link către locația bisericii -->
+        <section>
+            <h2>Locație</h2>
+            <div id="map-link">
+                <a href="https://goo.gl/maps/EfXeLKymyWJMUWqAA" target="_blank">Vezi locația pe hartă</a>
+            </div>
+        </section>
+
+        <!-- Secțiunea Adăugare postare - disponibilă doar pentru administratori -->
+        <section class="add-post-section admin-only">
+            <h2>Adăugare postare</h2>
+            <form onsubmit="addPost(); return false;">
+                <input type="text" id="post-title" placeholder="Titlu">
+                <textarea id="post-content" placeholder="Continut"></textarea>
+                <label>
+                    Selectați tipul de conținut pentru postare:
+                    <select id="post-content-type">
+                        <option value="text">Text</option>
+                        <option value="image">Imagine</option>
+                        <option value="video">Videoclip</option>
+                        <option value="both">Ambele</option>
+                    </select>
+                </label>
+                <button type="submit" class="action-btn">Adaugă postare</button>
+            </form>
+        </section>
+    </div>
+
+    <footer>
+        <p>Drepturi de autor © 2023 Biserica Sf. Ierarhi Atanasie și Chiril, Curechiștea. Toate drepturile rezervate.</p>
+    </footer>
+
+    <script>
+        // Variabilă pentru a verifica dacă administratorul este autentificat
+        let isAdminAuthenticated = false;
+
+        // Funcție pentru afișarea sau ascunderea barei stângi
+        function toggleLeftBar() {
+            const leftBar = document.getElementById('leftBar');
+            leftBar.classList.toggle('active');
+        }
+
+        // Funcție pentru afișarea sau ascunderea unei secțiuni
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.classList.toggle('section-open');
+        }
+
+        // Funcție pentru gestiunea aprecierii postării
+        function toggleLike(postId) {
+            const likeBtn = document.getElementById('likes-count-' + postId);
+            let likesCount = parseInt(likeBtn.textContent);
+            if (likeBtn.classList.contains('liked')) {
+                likeBtn.classList.remove('liked');
+                likesCount--;
+            } else {
+                likeBtn.classList.add('liked');
+                likesCount++;
+            }
+            likeBtn.textContent = likesCount;
+        }
+
+        // Funcție pentru adăugarea unei noi postări
+        function addPost() {
+            const postTitle = document.getElementById('post-title').value;
+            const postContent = document.getElementById('post-content').value;
+            const postContentType = document.getElementById('post-content-type').value;
+
+            // Aici puteți adăuga codul pentru adăugarea postării în baza de date (înlocuiți alert-ul cu funcționalitatea dorită)
+            alert('Ați adăugat o nouă postare:\nTitlu: ' + postTitle + '\nConținut: ' + postContent + '\nTip conținut: ' + postContentType);
+
+            // Resetarea formularului după adăugare
+            document.getElementById('post-title').value = '';
+            document.getElementById('post-content').value = '';
+        }
+
+        // Funcție pentru distribuirea postării pe Facebook
+        function sharePost(postId) {
+            // Simulăm deschiderea Facebook pentru a distribui postarea
+            window.open('https://www.facebook.com/sharer.php?u=' + window.location.href, '_blank');
+        }
+
+        // Funcție pentru distribuirea postării pe Twitter
+        function shareOnTwitter(postId) {
+            // Simulăm deschiderea Twitter pentru a distribui postarea
+            window.open('https://twitter.com/share?url=' + window.location.href, '_blank');
+        }
+
+        // Funcție pentru distribuirea postării prin Email
+        function shareByEmail(postId) {
+            // Aici puteți adăuga codul pentru distribuirea postării prin email (înlocuiți alert-ul cu funcționalitatea dorită)
+            alert('Postarea ' + postId + ' a fost distribuită prin email.');
+        }
+
+        // Funcție pentru autentificarea administratorilor
+        function authenticateAdmin() {
+            const adminEmail = document.getElementById('admin-email').value;
+            const adminPassword = document.getElementById('admin-password').value;
+
+            // Verificăm dacă emailul și parola introduse sunt cele valide pentru administratori
+            const validEmail1 = 'admin1@example.com';
+            const validPassword1 = 'password1';
+            const validEmail2 = 'admin2@example.com';
+            const validPassword2 = 'password2';
+
+            if (
+                (adminEmail === validEmail1 && adminPassword === validPassword1) ||
+                (adminEmail === validEmail2 && adminPassword === validPassword2)
+            ) {
+                // Autentificare reușită - afișăm secțiunea pentru administratori
+                showAdminSection();
+                // Setăm variabila de autentificare ca fiind true
+                isAdminAuthenticated = true;
+            } else {
+                // Autentificare eșuată - afișăm un mesaj de eroare
+                alert('Autentificare eșuată. Verificați emailul și parola.');
+                // Resetăm variabila de autentificare
+                isAdminAuthenticated = false;
+            }
+        }
+
+        // Funcție pentru afișarea secțiunii pentru administratori
+        function showAdminSection() {
+            const adminSection = document.querySelector('.admin-only');
+            adminSection.style.display = 'block';
+        }
+
+        // Funcție pentru a restricționa accesul la secțiunea de adăugare postare doar pentru administratori
+        function restrictAddPostSection() {
+            const addPostSection = document.querySelector('.add-post-section');
+            if (isAdminAuthenticated) {
+                addPostSection.style.display = 'block';
+            } else {
+                addPostSection.style.display = 'none';
+            }
+        }
+
+        // Verificăm la încărcarea paginii dacă administratorul este autentificat și restricționăm secțiunea de adăugare postare
+        window.onload = restrictAddPostSection;
+    </script>
+</body>
+
+</html>
